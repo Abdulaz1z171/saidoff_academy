@@ -4,6 +4,7 @@ from .serializers import *
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 
 # Create your views here.
@@ -25,7 +26,7 @@ class ComputerFeauturesView(generics.ListAPIView):
     queryset = ComputerFeatures.objects.all()
     serializer_class = ComputerFeaturesSerializer
 
-class UserContactAplicationView(generics.ListCreateAPIView):
+class UserContactAplicationView(generics.CreateAPIView):
     queryset = UserContactAplication.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = UserContactAplicationSerializer
@@ -47,9 +48,7 @@ class MentorWorkPlaceView(generics.ListAPIView):
     queryset = MentorWorkPlace.objects.all()
     serializer_class = MentorWorkPlaceSerializer
 
-class MentorAchievementsView(generics.ListAPIView):
-    queryset = MentorAchievements.objects.all()
-    serializer_class = MentorAchievementsSerializer
+
 
 
 class OurProgramView(generics.ListAPIView):
@@ -74,3 +73,14 @@ class FAQView(generics.ListAPIView):
 class WhyUsView(generics.ListAPIView):
     queryset = WhyUs.objects.all()
     serializer_class = WhyUsSerializer
+
+class CourseDetailView(generics.RetrieveAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseDetailSerializer
+    lookup_field  = 'pk'
+
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_object()
+        serializer = self.get_serializer(queryset)
+        return Response(serializer.data)

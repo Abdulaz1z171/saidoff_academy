@@ -16,7 +16,7 @@ class Course(models.Model):
 class ForWhom(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name='for_whoms')
 
     def __str__(self):
         return self.title
@@ -28,7 +28,7 @@ class CoursePlan(models.Model):
     time_for_practice = models.CharField(max_length=100)
     for_theory = models.TextField()
     for_practice = models.TextField()
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name = 'course_plans')
 
     def __str__(self):
         return f"{self.course.title} Plan"
@@ -39,7 +39,7 @@ class ComputerFeatures(models.Model):
     cpu = models.CharField(max_length=100)
     video_card = models.CharField(max_length=100)
     screen = models.CharField(max_length=100)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name='computer_features')
 
     def __str__(self):
         return f"Computer Features for {self.course.title}"
@@ -49,7 +49,7 @@ class UserContactAplication(models.Model):
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=20)
     is_checked = models.BooleanField(default=False)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name='user_contact_aplications')
     created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -58,7 +58,7 @@ class UserContactAplication(models.Model):
 
 class CourseModule(models.Model):
     title = models.CharField(max_length=255)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name='course_modules')
 
     def __str__(self):
         return f"{self.title} - {self.course.title}"
@@ -66,7 +66,7 @@ class CourseModule(models.Model):
 
 class CourseLesson(models.Model):
     title = models.CharField(max_length=255)
-    course_module = models.ForeignKey(CourseModule, on_delete=models.CASCADE)
+    course_module = models.ForeignKey(CourseModule, on_delete=models.CASCADE,related_name='course_lessons')
 
     def __str__(self):
         return f"Lesson: {self.title} in Module: {self.course_module.title}"
@@ -78,6 +78,10 @@ class Mentor(models.Model):
     position = models.CharField(max_length=100)
     image = models.ImageField(upload_to='mentor_images/')
     experience = models.CharField(max_length=255)
+    number_of_projects = models.CharField(max_length=255)
+    number_of_video_lessons = models.CharField(max_length= 255)
+    extra_field = models.CharField(max_length=255)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,related_name='mentors')
     
 
     def __str__(self):
@@ -85,19 +89,19 @@ class Mentor(models.Model):
 
 
 class MentorWorkPlace(models.Model):
-    mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE)
+    mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE,related_name='mentor_work_places')
     logo = models.ImageField(upload_to='workplace_logos/')
 
     def __str__(self):
         return f"Workplace for {self.mentor.full_name}"
 
 
-class MentorAchievements(models.Model):
-    mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
+# class MentorAchievements(models.Model):
+#     mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE,related_name='mentor_achievments')
+#     title = models.CharField(max_length=255)
 
-    def __str__(self):
-        return f"Achievement: {self.title} by {self.mentor.full_name}"
+#     def __str__(self):
+#         return f"Achievement: {self.title} by {self.mentor.full_name}"
 
 
 class OurProgram(models.Model):
@@ -111,6 +115,7 @@ class OurProgram(models.Model):
 class OurProgramInfo(models.Model):
     description = models.TextField()
     our_program = models.ForeignKey(OurProgram,on_delete=models.CASCADE)
+    order = models.IntegerField()
 
     def __str__(self):
         return self.our_program.title

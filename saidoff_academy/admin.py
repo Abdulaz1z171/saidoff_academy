@@ -35,5 +35,5 @@ admin.site.register(WhyUs,WhyUsTranslationAdmin)
 
 
 
-for a in [Course,ForWhom,CourseLesson,CourseModule,CoursePlan,ComputerFeatures,UserContactAplication,Mentor,MentorAchievements,MentorWorkPlace,Partner]:
+for a in [Course,ForWhom,CourseLesson,CourseModule,CoursePlan,ComputerFeatures,UserContactAplication,Mentor,MentorWorkPlace,Partner]:
     admin.site.register(a)

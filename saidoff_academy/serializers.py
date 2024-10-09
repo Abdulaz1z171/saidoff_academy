@@ -31,20 +31,19 @@ class UserContactAplicationSerializer(serializers.ModelSerializer):
         fields = ['full_name','phone_number','is_checked','course']
 
 
-class CourseModuleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CourseModule
-        fields = ['title','course']
+
 
 class CourseLessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseLesson
         fields = ['title','course_module']
 
-class MentorSerializer(serializers.ModelSerializer):
+class CourseModuleSerializer(serializers.ModelSerializer):
+    course_lesson = CourseLessonSerializer(many=True,read_only=True,source='course_lessons')
     class Meta:
-        model = Mentor
-        fields = ['full_name','profession','position','image','experience']
+        model = CourseModule
+        fields = ['title','course','course_lesson']
+
 
 
 class MentorWorkPlaceSerializer(serializers.ModelSerializer):
@@ -53,15 +52,24 @@ class MentorWorkPlaceSerializer(serializers.ModelSerializer):
         fields = ['logo','mentor']
 
 
-class MentorAchievementsSerializer(serializers.ModelSerializer):
+
+
+class MentorSerializer(serializers.ModelSerializer):
+    mentor_work_place = MentorWorkPlaceSerializer(many = True,read_only=True,source='mentor_work_places')
     class Meta:
-        model = MentorAchievements
-        fields = ['mentor','title']
+        model = Mentor
+        fields = ['full_name','profession','position','image','experience','course','mentor_work_place']
 
 class OurProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = OurProgram
         fields = ['log','title','description']
+
+class OurProgramInfoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OurProgramInfo
+        fields = ['description','our_program','order']
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
@@ -84,3 +92,29 @@ class WhyUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = WhyUs
         fields = ['image','title','description']
+
+
+
+
+# class MentorDetailSerializer(serializers.ModelSerializer):
+#     mentor_achievments = MentorAchievementsSerializer(many = True, read_only=True)
+#     mentor_work_places = MentorWorkPlaceSerializer(many = True,read_only=True)
+
+#     class Meta:
+#         model = Mentor
+#         fields = ['full_name','profession','position','image','experience','mentor_achievments','mentor_workplaces']
+
+
+class CourseDetailSerializer(serializers.ModelSerializer):
+    for_whom = ForWhomSerializer(many=True,read_only=True,source='for_whoms')
+    course_plan = CoursePlanSerializer(many=True,read_only=True,source='course_plans')
+    course_module = CourseModuleSerializer(many = True,read_only=True,source='course_modules')
+    mentor = MentorSerializer(many = True, read_only=True,source='mentors')
+    computer_feature = ComputerFeaturesSerializer(many = True,read_only=True,source='computer_features')
+
+    
+
+# 'for_whom','course_plan','course_modules','mentor','computer_features'
+    class Meta:
+        model = Course
+        fields = ['title','description','mentor','for_whom','course_plan','course_module','computer_feature']

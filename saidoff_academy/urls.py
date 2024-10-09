@@ -4,6 +4,7 @@ from saidoff_academy import views
 
 urlpatterns = [
     path('courses/',views.CourseView.as_view()),
+    path('course/<int:pk>/',views.CourseDetailView.as_view()),
     path('for-whoms/',views.ForWhomView.as_view()),
     path('course-plans/',views.CoursePlanView.as_view()),
     path('computer-features/',views.ComputerFeauturesView.as_view()),
@@ -12,7 +13,6 @@ urlpatterns = [
     path('course-lessons/',views.CourseLessonView.as_view()),
     path('mentors/',views.MentorView.as_view()),
     path('mentor-work-places/',views.MentorWorkPlaceView.as_view()),
-    path('mentor-achievments/',views.MentorAchievementsView.as_view()),
     path('our-programs/',views.OurProgramView.as_view()),
     path('feedbacks/',views.FeedbackView.as_view()),
     path('partners/',views.PartnerView.as_view()),
